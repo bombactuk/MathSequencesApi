@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="
+      http://www.liquibase.org/xml/ns/dbchangelog
+      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.29.xsd">
+
+    <changeSet id="1" author="bombactuk">
+        <preConditions onFail="MARK_RAN">
+            <not><tableExists tableName="roles"/></not>
+        </preConditions>
+
+        <createTable tableName="roles">
+            <column name="id" type="serial">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+
+        <insert tableName="roles">
+            <column name="name" value="ROLE_USER"/>
+        </insert>
+        <insert tableName="roles">
+            <column name="name" value="ROLE_ADMIN"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="2" author="bombactuk">
+        <preConditions onFail="MARK_RAN">
+            <not><tableExists tableName="users"/></not>
+        </preConditions>
+
+        <createTable tableName="users">
+            <column name="id" type="bigserial">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="username" type="varchar(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="password" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="email" type="varchar(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="3" author="bombactuk">
+        <preConditions onFail="MARK_RAN">
+            <not><tableExists tableName="users_roles"/></not>
+        </preConditions>
+
+        <createTable tableName="users_roles">
+            <column name="user_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="role_id" type="integer">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey
+                tableName="users_roles"
+                columnNames="user_id, role_id"
+                constraintName="pk_users_roles"/>
+
+        <addForeignKeyConstraint
+                baseTableName="users_roles" baseColumnNames="user_id"
+                referencedTableName="users" referencedColumnNames="id"
+                constraintName="fk_users_roles_user"
+                onDelete="CASCADE"/>
+
+        <addForeignKeyConstraint
+                baseTableName="users_roles" baseColumnNames="role_id"
+                referencedTableName="roles" referencedColumnNames="id"
+                constraintName="fk_users_roles_role"
+                onDelete="CASCADE"/>
+    </changeSet>
+
+    <changeSet id="4" author="bombactuk">
+        <preConditions onFail="MARK_RAN">
+            <not><tableExists tableName="factorial"/></not>
+        </preConditions>
+
+        <createTable tableName="factorial">
+            <column name="id" type="bigserial">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="number" type="integer"/>
+            <column name="factorial_numbers" type="text"/>
+            <column name="request_time" type="timestamp"/>
+            <column name="enabled" type="boolean"/>
+            <column name="user_id" type="bigint">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="factorial" baseColumnNames="user_id"
+                referencedTableName="users" referencedColumnNames="id"
+                constraintName="fk_factorial_user"
+                onDelete="SET NULL"/>
+    </changeSet>
+
+    <changeSet id="5" author="bombactuk">
+        <preConditions onFail="MARK_RAN">
+            <not><tableExists tableName="fibonacci"/></not>
+        </preConditions>
+
+        <createTable tableName="fibonacci">
+            <column name="id" type="bigserial">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="number" type="integer"/>
+            <column name="fibonacci_numbers" type="text"/>
+            <column name="request_time" type="timestamp"/>
+            <column name="enabled" type="boolean"/>
+            <column name="user_id" type="bigint">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="fibonacci" baseColumnNames="user_id"
+                referencedTableName="users" referencedColumnNames="id"
+                constraintName="fk_fibonacci_user"
+                onDelete="SET NULL"/>
+    </changeSet>
+
+</databaseChangeLog>
