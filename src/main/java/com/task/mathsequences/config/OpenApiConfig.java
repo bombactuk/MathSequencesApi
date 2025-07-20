@@ -12,9 +12,9 @@ public class OpenApiConfig {
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
                 .info(new Info()
-                        .title("Bank Card Management API")
+                        .title("math-sequences-api")
                         .version("1.0")
-                        .description("API для управления банковскими картами"));
+                        .description("API для вычисления чисел Фибоначчи и Факториалов"));
     }
 
 }
